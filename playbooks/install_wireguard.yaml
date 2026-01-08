@@ -1,6 +1,6 @@
 
-- name: client tasks
-  hosts: clients
+- name: general tasks
+  hosts: all
   become: yes
 
   tasks:
