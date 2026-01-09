@@ -1,0 +1,28 @@
+- name: configure wireguard gateway
+  hosts: gateway
+  become: yes
+
+  tasks:
+    - name: Generate private
+      ansible.builtin.shell: |
+        umask 077
+        wg genkey > /etc/wireguard/gateway_private
+        cat /etc/wireguard/gateway_private
+      register: gw_pri
+
+    - name: Generate public
+      ansible.builtin.shell: |
+        wg pubkey <  /etc/wireguard/gateway_private > /etc/wireguard/gateway_public
+        cat /etc/wireguard/gateway_public
+      register: gw_pub
+
+    - name: Create wg0-gw.conf
+      ansible.builtin.template:
+        src: ../files/wg0-gw.conf
+        dest: /etc/wireguard/wg0-gw.conf
+
+    - name: Copy public key from gateway to controller
+      ansible.builtin.fetch:
+        src: /etc/wireguard/gateway_public
+        dest: ../files/gateway_public
+        flat: yes

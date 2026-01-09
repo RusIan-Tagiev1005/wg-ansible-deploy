@@ -1,0 +1,25 @@
+
+- name: test_tasks
+  hosts: gateway
+  become: yes
+
+  tasks:
+    - name: Create wg0-gw.conf
+      ansible.builtin.template:
+        src: ../files/wg0-gw.conf
+        dest: /etc/wireguard/wg0-gw.conf
+    - name: add peers
+      debug:
+        msg: "{{ hostvars[item].wg_ip }}"
+      loop: "{{groups['nodes']}}"
+    - name: create peer in wg0-gw.conf
+      ansible.builtin.blockinfile:
+        path: /etc/wireguard/wg0-gw.conf
+        marker: "# {mark} PEER {{ item }}"
+        block: |
+          [Peer]
+          PublicKey =
+          Endpoint = {{ hostvars[item].wg_ip }}
+          AllowedIps = {{ hostvars[item].dns }}
+      loop: "{{ groups['nodes'] }}"
+
