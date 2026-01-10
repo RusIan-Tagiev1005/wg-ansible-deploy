@@ -1,0 +1,8 @@
+- hosts: gateway
+  tasks:
+  - name: Remove [Peer] blocks from wg0-gw.conf
+    ansible.builtin.blockinfile:
+      path: /etc/wireguard/wg0-gw.conf
+      marker: "# {mark} for {{ item }}"
+      state: absent
+    loop: "{{ groups['nodes'] }}"

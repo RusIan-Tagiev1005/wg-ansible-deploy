@@ -2,15 +2,15 @@
 - name: general tasks
   hosts: all
   become: yes
-
   tasks:
-    - name: install epel-release
+    - name: Install epel-release
       ansible.builtin.package:
         name: epel-release
         state: present
+      when: ansible_facts["os_family"] == "RedHat"
 
-    - name: Install  htop
+    - name: Install  wg
       ansible.builtin.package:
-        name: htop
+        name: wireguard-tools
         state: present
-    
+        update_cache: yes

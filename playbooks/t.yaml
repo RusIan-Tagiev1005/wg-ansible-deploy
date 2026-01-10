@@ -1,0 +1,7 @@
+- name: test task1
+  hosts: localhost
+
+  tasks:
+    - name: check os
+      debug:
+        msg: "{{ansible_os_family}}"

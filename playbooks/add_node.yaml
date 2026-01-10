@@ -1,0 +1,13 @@
+- hosts: gateway
+
+  tasks:
+    - name: Add [Peer] blocks in wg0-gw.conf
+      ansible.builtin.blockinfile:
+        path: /etc/wireguard/wg0-gw.conf
+        insertafter: EOF
+        block: |
+          [Peer]
+          PublicKey = {{ lookup('file', '../files/' ~item ~ '_public') }}
+          AllowedIps = {{ hostvars[item].wg_ip }}/32
+        marker: "# {mark} for {{ item }}"
+      loop: "{{ groups['nodes'] }}"

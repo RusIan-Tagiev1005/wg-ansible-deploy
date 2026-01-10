@@ -1,0 +1,17 @@
+- hosts: all
+  become: yes
+
+  tasks:
+    - name: Enable wg-quick service on gateway
+      ansible.builtin.systemd:
+        name: "{{ service }}"
+        enabled: true
+        masked: no
+    
+    - debug:
+        msg: "{{service}}"
+
+    - name: turn on wireguard connection on hosts
+      ansible.builtin.systemd:
+        state: started
+        name: "{{ service }}"

@@ -26,3 +26,13 @@
         src: /etc/wireguard/gateway_public
         dest: ../files/gateway_public
         flat: yes
+
+    - name: Install iptables
+      ansible.builtin.package:
+        name: iptables
+        state: present
+
+    - name: Enabling forwarding on gateway
+      ansible.builtin.command: sysctl -w net.ipv4.ip_forward=1
+
+
