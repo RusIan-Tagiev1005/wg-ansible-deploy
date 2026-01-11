@@ -6,3 +6,11 @@
       marker: "# {mark} for {{ item }}"
       state: absent
     loop: "{{ groups['nodes'] }}"
+
+  - name: Restart wg-quick
+    ansible.builtin.systemd:
+      name: "{{ service }}"
+      state: restarted
+#      debug:
+#        msg: "{{service}}"
+

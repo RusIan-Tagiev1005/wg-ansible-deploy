@@ -18,15 +18,16 @@
 
     - name: Read gateway public key
       ansible.builtin.set_fact:
-        gw_pub: "{{ lookup('file', '../files/gateway_public') }}"
+        gw_pub: "{{ lookup('file', '../files/public_keys/gateway_public') }}"
 
     - name: Create wg0-n.conf
       ansible.builtin.template:
-        src: ../files/wg0-n.conf
+        src: ../files/templates/wg0-n.conf
         dest: /etc/wireguard/wg0-n.conf
-
+    - debug:
+        msg: "{{listen_port}}"
     - name: Copy public key from node to controller
       ansible.builtin.fetch:
         src: /etc/wireguard/{{inventory_hostname}}_public
-        dest: ../files/{{inventory_hostname}}_public
+        dest: ../files/public_keys/{{inventory_hostname}}_public
         flat: yes

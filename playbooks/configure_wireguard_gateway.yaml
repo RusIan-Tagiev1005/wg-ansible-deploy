@@ -18,13 +18,13 @@
 
     - name: Create wg0-gw.conf
       ansible.builtin.template:
-        src: ../files/wg0-gw.conf
+        src: ../files/templates/wg0-gw.conf
         dest: /etc/wireguard/wg0-gw.conf
 
     - name: Copy public key from gateway to controller
       ansible.builtin.fetch:
         src: /etc/wireguard/gateway_public
-        dest: ../files/gateway_public
+        dest: ../files/public_keys/gateway_public
         flat: yes
 
     - name: Install iptables

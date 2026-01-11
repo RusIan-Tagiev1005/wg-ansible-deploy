@@ -2,12 +2,12 @@
   become: yes
 
   tasks:
-    - name: Enable wg-quick service on gateway
+    - name: Enable wg-quick service on hosts
       ansible.builtin.systemd:
         name: "{{ service }}"
         enabled: true
         masked: no
-    
+
     - debug:
         msg: "{{service}}"
 
