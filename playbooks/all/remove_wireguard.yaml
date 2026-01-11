@@ -1,0 +1,25 @@
+- hosts: all
+  become: yes
+  tasks:
+    - name: Stop and disable wg-quick service
+      ansible.builtin.systemd:
+        name: "wg-quick@{{ interface }}"
+        state: stopped
+        enabled: false
+#    - name: Remove wireguard interface
+#      ansible.builtin.command: ip link delete {{ interface }}
+    - name: Remove wireguard-tools
+      ansible.builtin.package:
+        name: wireguard-tools
+        state: absent
+
+    - name: Remove epel-release
+      ansible.builtin.package:
+        name: epel-release
+        state: absent
+      when: ansible_facts["os_family"] == "RedHat"
+
+    - name: Remove /etc/wireguard
+      ansible.builtin.file:
+        path: /etc/wireguard
+        state: absent

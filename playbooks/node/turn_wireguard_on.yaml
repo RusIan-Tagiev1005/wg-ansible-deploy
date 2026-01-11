@@ -1,0 +1,15 @@
+- hosts: nodes
+  become: yes
+
+  tasks:
+    - name: Enable wg-quick service on hosts
+      ansible.builtin.systemd:
+        name: "wg-quick@{{ interface }}"
+        enabled: true
+        state: started
+        masked: no
+
+    - debug:
+        msg: "{{interface}}"
+
+

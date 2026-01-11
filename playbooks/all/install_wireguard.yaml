@@ -1,6 +1,4 @@
-
-- name: general tasks
-  hosts: all
+- hosts: all
   become: yes
   tasks:
     - name: Install epel-release

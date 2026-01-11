@@ -1,0 +1,43 @@
+- name: configure wireguard gateway
+  hosts: gateway
+  become: yes
+
+  tasks:
+    - name: Generate private
+      ansible.builtin.shell: |
+        umask 077
+        wg genkey > /etc/wireguard/{{ inventory_hostname }}_private
+        cat /etc/wireguard/{{ inventory_hostname }}_private
+      register: gw_pri
+      no_log: true
+
+    - name: Generate public
+      ansible.builtin.shell: |
+        wg pubkey <  /etc/wireguard/{{ inventory_hostname }}_private > /etc/wireguard/{{ inventory_hostname }}_public
+        cat /etc/wireguard/{{ inventory_hostname }}_public
+      register: gw_pub
+
+    - name: Create wg0-gw.conf
+      ansible.builtin.template:
+        src: "{{playbook_dir}}/../../files/templates/wg0-gw.conf"
+        dest: /etc/wireguard/wg0-gw.conf
+
+    - name: Copy public key from gateway to controller
+      ansible.builtin.fetch:
+        src: /etc/wireguard/{{ inventory_hostname }}_public
+        dest: "{{playbook_dir}}/../../files/public_keys/{{inventory_hostname}}_public"
+        flat: yes
+
+    - name: Install iptables
+      ansible.builtin.package:
+        name: iptables
+        state: present
+
+    - name: Enabling forwarding on gateway
+      ansible.builtin.sysctl:
+        name: net.ipv4.ip_forward
+        value: "1"
+        state: present
+        reload: yes
+
+

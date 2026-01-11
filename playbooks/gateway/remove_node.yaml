@@ -9,8 +9,6 @@
 
   - name: Restart wg-quick
     ansible.builtin.systemd:
-      name: "{{ service }}"
+      name: "wg-quick@{{ interface }}"
       state: restarted
-#      debug:
-#        msg: "{{service}}"
 
