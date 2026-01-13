@@ -9,6 +9,7 @@
         wg genkey > /etc/wireguard/{{inventory_hostname}}_private
         cat /etc/wireguard/{{inventory_hostname}}_private
       register: node_pri
+      no_log: true
 
     - name: Generate public
       ansible.builtin.shell: |
