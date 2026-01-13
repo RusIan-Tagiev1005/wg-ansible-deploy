@@ -124,6 +124,7 @@ ssh ключи между контроллером и нодами не наст
 - удаляет пакет wireguard-tools
 - удаляет папку /etc/wireguard
 
+Собирает публичные ключи сюда `files/public_keys`
 
 
 # Directory Structure
