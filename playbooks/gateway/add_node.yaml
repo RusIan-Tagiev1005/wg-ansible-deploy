@@ -14,4 +14,4 @@
     - name: Restart wg-quick
       ansible.builtin.systemd:
         name: "wg-quick@{{ interface }}"
-        state: restarted
+        state: reloaded
