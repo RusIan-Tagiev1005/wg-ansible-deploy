@@ -59,9 +59,9 @@ ex.
 
 ansible_user=root
 
-interface=eth0
+interface=wg0-gw
 
-gateway_interface=wg0-gw
+gateway_interface=eth0
 
 # [nodes:vars]
 
