@@ -3,11 +3,13 @@
 
 Перед запуском плейбуков необходимо прописать все параметры в `inventory.ini`
 
+Для корректной работы необходима сетевая связность с узлами
+
 # [all:vars]
 
 `listen_port` - порт, который будут слушать все узлы в VPN
 
-`network_mask` - маска сети, особо ни на что не влияет, но используется в `templates`
+`network_mask` - маска сети, см. файлы в `templates`
 
 
 ex.
@@ -28,14 +30,21 @@ node_gw ansible_host=192.168.1.2 wg_ip=10.0.0.1
 
 # [nodes]
 
+`ansible_host` - см. выше
+
 `wg_ip` - см. выше
 
-`ansible_host` - см. выше
+
 
 ex.
 
 node0 ansible_host=192.168.1.201 wg_ip=10.0.0.2
 
+node1 ansible_host=192.168.3.203 wg_ip=10.0.0.3
+
+node2 ansible_host=rogaicopita.su wg_ip=10.0.0.4
+
+node3 ansible_host=node3.lan wg_ip=10.0.0.5
 
 # [gateway:vars]
 
@@ -143,3 +152,7 @@ wg-ansible-deploy
       └── README.md
 
 ```
+# to-do
+
+- чек пингом все хосты
+- сделать открытие портов на узлах
