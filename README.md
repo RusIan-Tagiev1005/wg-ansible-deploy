@@ -1,4 +1,72 @@
 
+
+
+Перед запуском плейбуков необходимо прописать все параметры в `inventory.ini`
+
+# [all:vars]
+
+`listen_port` - порт, который будут слушать все узлы в VPN
+
+`network_mask` - маска сети, особо ни на что не влияет, но используется в `templates`
+
+
+ex.
+
+listen_port=23122
+
+network_mask=24
+
+# [gateway]
+
+`ansible_host` - ip/доменное имя узла в сетм
+
+`wg_ip` - ip узла в VPN
+
+ex.
+
+node_gw ansible_host=192.168.1.2 wg_ip=10.0.0.1
+
+# [nodes]
+
+`wg_ip` - см. выше
+
+`ansible_host` - см. выше
+
+ex.
+
+node0 ansible_host=192.168.1.201 wg_ip=10.0.0.2
+
+
+# [gateway:vars]
+
+`ansible_user` - пользователь, от которого будет выполнятся настройка на узле
+
+`interface` - имя интерфейса ноды, через который идет трафик VPN
+
+`gateway_interface` - интерфейс ноды, через который выполняется подключение к ноде
+
+
+ex.
+
+ansible_user=root
+
+interface=eth0
+
+gateway_interface=wg0-gw
+
+# [nodes:vars]
+
+`ansible_user` - см выше
+
+`interface`- имя интерфейса ноды, через который идет трафик VPN
+
+
+ex.
+
+interface
+
+ansible_user
+
 ## Порядок запуска (из директории репозитория)
 
 1. `ansible-playbook playbooks/all/install_wireguard.yaml`
@@ -7,6 +75,16 @@
 4. `ansible-playbook playbooks/gateway/add_node.yaml`
 5. `ansible-playbook playbooks/node/turn_wireguard_on.yaml`
 
+
+## Про inventory.ini
+
+Хорошим подключатся к нодам не по `root`, а
+
+использовать `ansible` пользователя с соотвествующими правами
+
+Нужно указывать интерфейс шлюза, через который выполняется подключение
+
+из-за postup postdown правил в `wg0-gw.conf`
 
 ## Про удаление нод
 Удалить ноду из сети можно с помощью ansible-playbook `ansible-playbook playbooks/gateway/remove_node.yaml`
@@ -23,15 +101,6 @@
 
 
 
-## Про inventory.ini
-
-Хорошим подключатся к нодам не по `root`, а
-
-использовать `ansible` пользователя с соотвествующими правами
-
-Нужно указывать интерфейс шлюза, через который выполняется подключение
-
-из-за postup postdown правил в `wg0-gw.conf`
 
 
 ## Прочее
